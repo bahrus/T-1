@@ -27,7 +27,7 @@ module t_1{
         return new PatternToObjectGenerator(strings, values);
     }
 
-    class StringMatch {
+    export class StringMatch {
         posOfHead: number;
         constructor(public stringSeq: string[], public value: string) {
             if (!stringSeq || stringSeq.length === 0) {
@@ -57,5 +57,6 @@ module t_1{
             return this.posOfHead;
         }
         tail: StringMatch;
+
     }
 }

@@ -20,14 +20,13 @@
   <ItemGroup>
     <Content Include="app.css" />
     <Content Include="index.html" />
-    <Content Include="README.html">
-      <DependentUpon>README.md</DependentUpon>
-    </Content>
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="app.ts" />
+    <TypeScriptCompile Include="Scripts\typings\chai\chai.d.ts" />
+    <TypeScriptCompile Include="test.t-1.ts" />
     <TypeScriptCompile Include="Scripts\typings\lodash\lodash.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\mocha\mocha.d.ts" />
     <TypeScriptCompile Include="t-1.ts" />
   </ItemGroup>
   <ItemGroup>

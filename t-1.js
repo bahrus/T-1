@@ -53,5 +53,6 @@ var t_1;
         };
         return StringMatch;
     })();
+    t_1.StringMatch = StringMatch;
 })(t_1 || (t_1 = {}));
 //# sourceMappingURL=t-1.js.map
