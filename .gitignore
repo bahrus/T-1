@@ -1,1 +1,5 @@
 /.idea
+/*.user
+/*.suo
+/obj/Debug
+/*.map
