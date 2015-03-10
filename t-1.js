@@ -51,6 +51,14 @@ var t_1;
             }
             return this.posOfHead;
         };
+        StringMatch.prototype.posSequence = function (offset) {
+            if (this.posOfHead === -1)
+                return [];
+            var newOffset = this.posOfHead + (offset === undefined ? 0 : offset);
+            var tailSeq = this.tail.posSequence(newOffset);
+            tailSeq.unshift(newOffset);
+            return tailSeq;
+        };
         return StringMatch;
     })();
     t_1.StringMatch = StringMatch;
