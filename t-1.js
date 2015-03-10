@@ -55,7 +55,7 @@ var t_1;
             if (this.posOfHead === -1)
                 return [];
             var newOffset = this.posOfHead + (offset === undefined ? 0 : offset);
-            var tailSeq = this.tail.posSequence(newOffset);
+            var tailSeq = this.tail.posSequence(newOffset + this.stringSeq[0].length);
             tailSeq.unshift(newOffset);
             return tailSeq;
         };

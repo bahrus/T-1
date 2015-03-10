@@ -12,6 +12,6 @@ describe('t_1.StringMatch',() => {
     it('Test 3. get sequence',() => {
         var test3 = new t_1.StringMatch(['th', 'th'], 'Is this the face that launched a thousand ships?');
         var seq = test3.posSequence();
-        chai.expect(seq).to.deep.equal([3, 6]);
+        chai.expect(seq).to.deep.equal([3, 8]);
     });
 });
