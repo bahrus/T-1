@@ -13,18 +13,41 @@ module t_1{
     
 
     export class PatternToObjectGenerator<TObj> implements IPatternToObjectGenerator<TObj>{
-        _seqOfTokens: string[];
+        private _stringMatcher: StringMatch;
+        private _stringToParse: string;
         constructor(public strings: string[], public values: string[]) {
 
         }
-        parse(s: string, parseOptions?: IParseOptions) {
-            
-            return null;
+        public parse(s: string, parseOptions?: IParseOptions) : TObj {
+            this._stringMatcher = new StringMatch(this.strings, s);
+            this._stringToParse = s;
+            return this.process();
+        }
+        private process(): TObj {
+            var iPosOfPointer = 0;
+            var seq = this._stringMatcher.posSequence();
+            var genericObj = {};
+            var returnObj = <TObj> genericObj;
+            var iValCounter = 0;
+            for (var i = 0, n = seq.length; i < n; i++) {
+                var iPosOfFragment = seq[i];
+                if (iPosOfFragment > iPosOfPointer) {
+                    var propName = this.values[iValCounter++];
+                    var propNameArr = propName.split('.');
+                    returnObj[propNameArr[1]] = this._stringToParse.substring(iPosOfPointer, iPosOfFragment);
+                    iPosOfPointer = iPosOfFragment + this.strings[i].length;
+                    //iValCounter++;
+                } else {
+                    iPosOfPointer += this.strings[i].length;
+                }
+            }
+            return returnObj;
         }
     }
 
-    export function compile<TObj>(strings : string[], ...values : string[]): IPatternToObjectGenerator<TObj> {
-        return new PatternToObjectGenerator(strings, values);
+    export function compile<TObj>(strings : string[], ...values : string[]): PatternToObjectGenerator<TObj> {
+        return new PatternToObjectGenerator<TObj>(strings, values);
+        
     }
 
     export class StringMatch {

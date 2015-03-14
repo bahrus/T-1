@@ -14,4 +14,17 @@ describe('t_1.StringMatch',() => {
         var seq = test3.posSequence();
         chai.expect(seq).to.deep.equal([3, 8]);
     });
+    it('Test 4.  generate object',() => {
+        var obj = {
+            prop1: 'obj.prop1',
+            prop2: 'obj.prop2'
+        };
+        //var test4 = new t_1.StringMatch(['th', 'th'], 'Is this the face that launched a thousand ships?');
+        var test4 = t_1.compile`Hello, ${obj.prop1} : ${obj.prop2} can you`;
+        var resultObj = test4.parse('Hello, monsieur : how can you');
+        chai.expect(resultObj).to.deep.equal({
+            prop1: 'monsieur',
+            prop2: 'how',
+        });
+    });
 });

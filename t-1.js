@@ -7,7 +7,29 @@ var t_1;
             this.values = values;
         }
         PatternToObjectGenerator.prototype.parse = function (s, parseOptions) {
-            return null;
+            this._stringMatcher = new StringMatch(this.strings, s);
+            this._stringToParse = s;
+            return this.process();
+        };
+        PatternToObjectGenerator.prototype.process = function () {
+            var iPosOfPointer = 0;
+            var seq = this._stringMatcher.posSequence();
+            var genericObj = {};
+            var returnObj = genericObj;
+            var iValCounter = 0;
+            for (var i = 0, n = seq.length; i < n; i++) {
+                var iPosOfFragment = seq[i];
+                if (iPosOfFragment > iPosOfPointer) {
+                    var propName = this.values[iValCounter++];
+                    var propNameArr = propName.split('.');
+                    returnObj[propNameArr[1]] = this._stringToParse.substring(iPosOfPointer, iPosOfFragment);
+                    iPosOfPointer = iPosOfFragment + this.strings[i].length;
+                }
+                else {
+                    iPosOfPointer += this.strings[i].length;
+                }
+            }
+            return returnObj;
         };
         return PatternToObjectGenerator;
     })();

@@ -20,9 +20,15 @@
   <ItemGroup>
     <Content Include="app.css" />
     <Content Include="index.html" />
+    <Content Include="Scripts\chai\2.1.1\chai.js" />
+    <Content Include="Scripts\expect.js\0.2.0\expect.js" />
+    <Content Include="Scripts\lodash.js\3.4.0\lodash.js" />
+    <Content Include="Scripts\mocha\2.1.0\mocha.css" />
+    <Content Include="Scripts\mocha\2.1.0\mocha.js" />
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="lib.es6.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\chai\chai.d.ts" />
     <TypeScriptCompile Include="test.t-1.ts" />
     <TypeScriptCompile Include="Scripts\typings\lodash\lodash.d.ts" />
@@ -39,6 +45,7 @@
       <DependentUpon>web.config</DependentUpon>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">12.0</VisualStudioVersion>
   </PropertyGroup>
@@ -68,6 +75,7 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TypeScriptRemoveComments>false</TypeScriptRemoveComments>
     <TypeScriptSourceMap>true</TypeScriptSourceMap>
+    <TypeScriptTarget>ES6</TypeScriptTarget>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
     <TypeScriptRemoveComments>true</TypeScriptRemoveComments>
