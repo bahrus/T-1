@@ -1,5 +1,8 @@
 ﻿///<reference path='Scripts/typings/mocha/mocha.d.ts'/>
 ///<reference path='Scripts/typings/chai/chai.d.ts'/>
+
+
+
 describe('t_1.StringMatch',() => {
     it('Test 1.  No matches',() => {
         var test1 = new t_1.StringMatch(['doesNotExist'], 'I am here');
@@ -20,11 +23,25 @@ describe('t_1.StringMatch',() => {
             prop2: 'obj.prop2'
         };
         //var test4 = new t_1.StringMatch(['th', 'th'], 'Is this the face that launched a thousand ships?');
-        var test4 = t_1.compile`Hello, ${obj.prop1} : ${obj.prop2} can you`;
+        var test4 = t_1.compile
+            `Hello, ${obj.prop1} : ${obj.prop2} can you`;
         var resultObj = test4.parse('Hello, monsieur : how can you');
         chai.expect(resultObj).to.deep.equal({
             prop1: 'monsieur',
             prop2: 'how',
+        });
+    });
+    it ('Test 5.  parse InactiveScript', () => {
+        var obj = {
+            varName: 'obj.varName',
+            varVal: 'obj.varVal',
+            comment: 'obj.comment'
+        };
+        var test5 = t_1.compile
+            `const ${obj.varName} = ${obj.varVal}; ${t_1.opt`//${obj.comment}`}`
+        var resultObj = test5.parse('const test = "hello"; //some comment');
+        debugger;
+        chai.expect(resultObj).to.deep.equal({
         });
     });
 });

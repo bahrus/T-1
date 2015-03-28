@@ -27,5 +27,16 @@ describe('t_1.StringMatch', function () {
             prop2: 'how',
         });
     });
+    it('Test 5.  parse InactiveScript', function () {
+        var obj = {
+            varName: 'obj.varName',
+            varVal: 'obj.varVal',
+            comment: 'obj.comment'
+        };
+        var test5 = t_1.compile `const ${obj.varName} = ${obj.varVal}; ${t_1.opt `//${obj.comment}`}`;
+        var resultObj = test5.parse('const test = "hello"; //some comment');
+        debugger;
+        chai.expect(resultObj).to.deep.equal({});
+    });
 });
 //# sourceMappingURL=test.t-1.js.map

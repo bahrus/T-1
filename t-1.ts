@@ -25,21 +25,41 @@ module t_1{
         }
         private process(): TObj {
             var iPosOfPointer = 0;
-            var seq = this._stringMatcher.posSequence();
+            var sequenceOfPositionsOfStaticsInStringToParse = this._stringMatcher.posSequence();
             var genericObj = {};
             var returnObj = <TObj> genericObj;
             var iValCounter = 0;
-            for (var i = 0, n = seq.length; i < n; i++) {
-                var iPosOfFragment = seq[i];
-                if (iPosOfFragment > iPosOfPointer) {
-                    var propName = this.values[iValCounter++];
-                    var propNameArr = propName.split('.');
-                    returnObj[propNameArr[1]] = this._stringToParse.substring(iPosOfPointer, iPosOfFragment);
-                    iPosOfPointer = iPosOfFragment + this.strings[i].length;
-                    //iValCounter++;
+            console.log(this.values);
+            for (var i = 0, n = sequenceOfPositionsOfStaticsInStringToParse.length; i < n; i++) {
+                var iPosOfNextStaticStringToken = sequenceOfPositionsOfStaticsInStringToParse[i];
+                if (iPosOfNextStaticStringToken > iPosOfPointer) {
+                    //#region there's some dynamic content
+                    var propertyPath = this.values[iValCounter++];
+                    if (typeof (propertyPath) === 'string') {
+                        var propNameArr = propertyPath.split('.');
+                        var dynamicValue = this._stringToParse.substring(iPosOfPointer, iPosOfNextStaticStringToken);
+                        returnObj[propNameArr[1]] = dynamicValue;
+                        iPosOfPointer = iPosOfNextStaticStringToken + this.strings[i].length;
+                    } else {
+                        debugger;
+                    }
+                    //#endregion
                 } else {
                     iPosOfPointer += this.strings[i].length;
                 }
+            }
+
+            if (iValCounter < this.values.length) {
+                //#region there's an extra trailing dynamic token to account for
+                var dynamicToken: string | PatternToObjectGenerator<TObj> =  this.values[iValCounter++];
+                if (typeof dynamicToken === 'string') {
+                    throw 'not Implemented';
+                } else {
+                    var pog = <PatternToObjectGenerator<TObj>> dynamicToken;
+                    debugger;
+                }
+                
+                //#endregion
             }
             return returnObj;
         }
@@ -47,7 +67,11 @@ module t_1{
 
     export function compile<TObj>(strings : string[], ...values : string[]): PatternToObjectGenerator<TObj> {
         return new PatternToObjectGenerator<TObj>(strings, values);
-        
+    }
+
+    export function opt<TObj>(strings: string[], ...values: string[]){
+        var returnObj = new PatternToObjectGenerator<TObj>(strings, values);
+        return <string> <any> returnObj;
     }
 
     export class StringMatch {

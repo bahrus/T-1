@@ -13,20 +13,39 @@ var t_1;
         };
         PatternToObjectGenerator.prototype.process = function () {
             var iPosOfPointer = 0;
-            var seq = this._stringMatcher.posSequence();
+            var sequenceOfPositionsOfStaticsInStringToParse = this._stringMatcher.posSequence();
             var genericObj = {};
             var returnObj = genericObj;
             var iValCounter = 0;
-            for (var i = 0, n = seq.length; i < n; i++) {
-                var iPosOfFragment = seq[i];
-                if (iPosOfFragment > iPosOfPointer) {
-                    var propName = this.values[iValCounter++];
-                    var propNameArr = propName.split('.');
-                    returnObj[propNameArr[1]] = this._stringToParse.substring(iPosOfPointer, iPosOfFragment);
-                    iPosOfPointer = iPosOfFragment + this.strings[i].length;
+            console.log(this.values);
+            for (var i = 0, n = sequenceOfPositionsOfStaticsInStringToParse.length; i < n; i++) {
+                var iPosOfNextStaticStringToken = sequenceOfPositionsOfStaticsInStringToParse[i];
+                if (iPosOfNextStaticStringToken > iPosOfPointer) {
+                    //#region there's some dynamic content
+                    var propertyPath = this.values[iValCounter++];
+                    if (typeof (propertyPath) === 'string') {
+                        var propNameArr = propertyPath.split('.');
+                        var dynamicValue = this._stringToParse.substring(iPosOfPointer, iPosOfNextStaticStringToken);
+                        returnObj[propNameArr[1]] = dynamicValue;
+                        iPosOfPointer = iPosOfNextStaticStringToken + this.strings[i].length;
+                    }
+                    else {
+                        debugger;
+                    }
                 }
                 else {
                     iPosOfPointer += this.strings[i].length;
+                }
+            }
+            if (iValCounter < this.values.length) {
+                //#region there's an extra trailing dynamic token to account for
+                var dynamicToken = this.values[iValCounter++];
+                if (typeof dynamicToken === 'string') {
+                    throw 'not Implemented';
+                }
+                else {
+                    var pog = dynamicToken;
+                    debugger;
                 }
             }
             return returnObj;
@@ -42,6 +61,15 @@ var t_1;
         return new PatternToObjectGenerator(strings, values);
     }
     t_1.compile = compile;
+    function opt(strings) {
+        var values = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            values[_i - 1] = arguments[_i];
+        }
+        var returnObj = new PatternToObjectGenerator(strings, values);
+        return returnObj;
+    }
+    t_1.opt = opt;
     var StringMatch = (function () {
         function StringMatch(stringSeq, value) {
             this.stringSeq = stringSeq;
