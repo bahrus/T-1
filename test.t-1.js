@@ -35,8 +35,12 @@ describe('t_1.StringMatch', function () {
         };
         var test5 = t_1.compile `const ${obj.varName} = ${obj.varVal}; ${t_1.opt `//${obj.comment}`}`;
         var resultObj = test5.parse('const test = "hello"; //some comment');
-        debugger;
-        chai.expect(resultObj).to.deep.equal({});
+        //debugger;
+        chai.expect(resultObj).to.deep.equal({
+            varName: 'test',
+            varVal: '"hello"',
+            comment: 'some comment'
+        });
     });
 });
 //# sourceMappingURL=test.t-1.js.map

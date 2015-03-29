@@ -18,16 +18,17 @@ module t_1{
         constructor(public strings: string[], public values: string[]) {
 
         }
-        public parse(s: string, parseOptions?: IParseOptions) : TObj {
+        public parse(s: string, obj?: TObj,  parseOptions?: IParseOptions) : TObj {
             this._stringMatcher = new StringMatch(this.strings, s);
             this._stringToParse = s;
-            return this.process();
+            return this.process(obj);
         }
-        private process(): TObj {
+        private process(obj?: TObj): TObj {
             var iPosOfPointer = 0;
             var sequenceOfPositionsOfStaticsInStringToParse = this._stringMatcher.posSequence();
-            var genericObj = {};
-            var returnObj = <TObj> genericObj;
+            var returnObj = obj;
+            if (!returnObj) returnObj = <TObj> {};
+            //var returnObj = <TObj> genericObj;
             var iValCounter = 0;
             console.log(this.values);
             for (var i = 0, n = sequenceOfPositionsOfStaticsInStringToParse.length; i < n; i++) {
@@ -53,10 +54,14 @@ module t_1{
                 //#region there's an extra trailing dynamic token to account for
                 var dynamicToken: string | PatternToObjectGenerator<TObj> =  this.values[iValCounter++];
                 if (typeof dynamicToken === 'string') {
-                    throw 'not Implemented';
+                    var propNameArr = dynamicToken.split('.');
+                    var dynamicValue = this._stringToParse.substring(iPosOfPointer);
+                    returnObj[propNameArr[1]] = dynamicValue;
                 } else {
                     var pog = <PatternToObjectGenerator<TObj>> dynamicToken;
-                    debugger;
+                    var stringToParse = this._stringToParse.substr(iPosOfPointer);
+                    pog.parse(stringToParse, returnObj);
+                    //debugger;
                 }
                 
                 //#endregion
@@ -85,8 +90,11 @@ module t_1{
                 this.posOfHead = -1;
                 return;
             }
-            
-            this.posOfHead = value.indexOf(stringSeq[0]);
+            if (stringSeq[0].length === 0) {
+                this.posOfHead = -1;
+            } else {
+                this.posOfHead = value.indexOf(stringSeq[0]);
+            }
             if (this.posOfHead > -1) {
                 var restOfString = value.substr(this.posOfHead + stringSeq[0].length);
                 this.tail = new StringMatch(_.tail(stringSeq), restOfString);
