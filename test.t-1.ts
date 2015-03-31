@@ -59,13 +59,11 @@ describe('t_1.StringMatch',() => {
             ignoreWhitespace: true,
             //debug: 'true',
         };
-        debugger;
-        var resultObj = test6.parse('const test   =   "hello";      //another comment', null,  parseOpts);
-        debugger;
+        var resultObj = test6.parse('const test   =   "hello";      //another comment', null, parseOpts);
         chai.expect(resultObj).to.deep.equal({
             varName: 'test',
             varVal: '"hello"',
-            comment: 'some comment'
+            comment: 'another comment'
         });
     });
 });

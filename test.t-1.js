@@ -52,13 +52,11 @@ describe('t_1.StringMatch', function () {
         var parseOpts = {
             ignoreWhitespace: true,
         };
-        debugger;
         var resultObj = test6.parse('const test   =   "hello";      //another comment', null, parseOpts);
-        debugger;
         chai.expect(resultObj).to.deep.equal({
             varName: 'test',
             varVal: '"hello"',
-            comment: 'some comment'
+            comment: 'another comment'
         });
     });
 });

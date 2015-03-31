@@ -107,7 +107,10 @@ var t_1;
                 else {
                     var pog = dynamicToken;
                     var stringToParse = this._stringToParse.substr(iPosOfPointer);
-                    pog.parse(stringToParse, returnObj);
+                    if (parseOptions && parseOptions.ignoreWhitespace) {
+                        stringToParse = stringToParse.trim();
+                    }
+                    pog.parse(stringToParse, returnObj, parseOptions);
                 }
             }
             return returnObj;
