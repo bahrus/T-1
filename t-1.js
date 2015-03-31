@@ -1,17 +1,57 @@
 ///<reference path='Scripts/typings/lodash/lodash.d.ts'/>
 var t_1;
 (function (t_1) {
+    function normalizeString(s) {
+        var result = '';
+        var bSpace = false;
+        for (var i = 0, n = s.length; i < n; i++) {
+            var chr = s[i];
+            if (chr === ' ') {
+                if (!bSpace) {
+                    result += chr;
+                    bSpace = true;
+                }
+            }
+            else {
+                result += chr;
+                bSpace = false;
+            }
+        }
+        return result;
+    }
+    t_1.normalizeString = normalizeString;
     var PatternToObjectGenerator = (function () {
         function PatternToObjectGenerator(strings, values) {
             this.strings = strings;
             this.values = values;
         }
         PatternToObjectGenerator.prototype.parse = function (s, obj, parseOptions) {
-            this._stringMatcher = new StringMatch(this.strings, s);
-            this._stringToParse = s;
-            return this.process(obj);
+            if (parseOptions) {
+                switch (parseOptions.debug) {
+                    case 'true':
+                        debugger;
+                }
+            }
+            var stringsToSearch = this.strings;
+            var stringToParse = s;
+            if (parseOptions && parseOptions.ignoreWhitespace) {
+                if (!this._normalizedStrings) {
+                    this._normalizedStrings = _.map(this.strings, function (str) {
+                        var trimmed = str.trim();
+                        if (trimmed.indexOf('  ') > -1) {
+                            throw 'not implemented';
+                        }
+                        return trimmed;
+                    });
+                }
+                stringsToSearch = this._normalizedStrings;
+                stringToParse = normalizeString(stringToParse);
+            }
+            this._stringMatcher = new StringMatch(stringsToSearch, stringToParse, parseOptions);
+            this._stringToParse = stringToParse;
+            return this.process(obj, parseOptions);
         };
-        PatternToObjectGenerator.prototype.process = function (obj) {
+        PatternToObjectGenerator.prototype.process = function (obj, parseOptions) {
             var iPosOfPointer = 0;
             var sequenceOfPositionsOfStaticsInStringToParse = this._stringMatcher.posSequence();
             var returnObj = obj;
@@ -19,7 +59,6 @@ var t_1;
                 returnObj = {};
             //var returnObj = <TObj> genericObj;
             var iValCounter = 0;
-            console.log(this.values);
             for (var i = 0, n = sequenceOfPositionsOfStaticsInStringToParse.length; i < n; i++) {
                 var iPosOfNextStaticStringToken = sequenceOfPositionsOfStaticsInStringToParse[i];
                 if (iPosOfNextStaticStringToken > iPosOfPointer) {
@@ -36,7 +75,12 @@ var t_1;
                     }
                 }
                 else {
-                    iPosOfPointer += this.strings[i].length;
+                    if (this._normalizedStrings) {
+                        iPosOfPointer += this._normalizedStrings[i].length;
+                    }
+                    else {
+                        iPosOfPointer += this.strings[i].length;
+                    }
                 }
             }
             if (iValCounter < this.values.length) {
@@ -76,9 +120,10 @@ var t_1;
     }
     t_1.opt = opt;
     var StringMatch = (function () {
-        function StringMatch(stringSeq, value) {
+        function StringMatch(stringSeq, value, parseOptions) {
             this.stringSeq = stringSeq;
             this.value = value;
+            this.parseOptions = parseOptions;
             if (!stringSeq || stringSeq.length === 0) {
                 this.posOfHead = -1;
                 return;
@@ -91,11 +136,16 @@ var t_1;
                 this.posOfHead = -1;
             }
             else {
-                this.posOfHead = value.indexOf(stringSeq[0]);
+                if (parseOptions && parseOptions.ignoreWhitespace) {
+                    this.posOfHead = value.indexOf(stringSeq[0].trim());
+                }
+                else {
+                    this.posOfHead = value.indexOf(stringSeq[0]);
+                }
             }
             if (this.posOfHead > -1) {
                 var restOfString = value.substr(this.posOfHead + stringSeq[0].length);
-                this.tail = new StringMatch(_.tail(stringSeq), restOfString);
+                this.tail = new StringMatch(_.tail(stringSeq), restOfString, parseOptions);
             }
         }
         StringMatch.prototype.next = function () {
@@ -107,7 +157,7 @@ var t_1;
             this.posOfHead = this.value.indexOf(this.stringSeq[0], this.posOfHead + this.stringSeq[0].length);
             if (this.posOfHead > -1) {
                 var restOfString = this.value.substr(this.posOfHead + this.stringSeq[0].length);
-                this.tail = new StringMatch(_.tail(this.stringSeq), restOfString);
+                this.tail = new StringMatch(_.tail(this.stringSeq), restOfString, this.parseOptions);
             }
             return this.posOfHead;
         };

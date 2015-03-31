@@ -42,5 +42,24 @@ describe('t_1.StringMatch', function () {
             comment: 'some comment'
         });
     });
+    it('Test 6.  Parse InactiveScript, ignore whitespace', function () {
+        var obj = {
+            varName: 'obj.varName',
+            varVal: 'obj.varVal',
+            comment: 'obj.comment'
+        };
+        var test6 = t_1.compile `const    ${obj.varName}=${obj.varVal};${t_1.opt `//${obj.comment}`}`;
+        var parseOpts = {
+            ignoreWhitespace: true,
+        };
+        debugger;
+        var resultObj = test6.parse('const test   =   "hello";      //another comment', null, parseOpts);
+        debugger;
+        chai.expect(resultObj).to.deep.equal({
+            varName: 'test',
+            varVal: '"hello"',
+            comment: 'some comment'
+        });
+    });
 });
 //# sourceMappingURL=test.t-1.js.map

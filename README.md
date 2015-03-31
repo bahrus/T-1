@@ -41,7 +41,14 @@ obj.stringProperty1 = "Is ";
 obj.stringProperty2 = "is ";
 obj.stringProperty3 = "e face that launched a thousand ships?";
 
-Rules:
+The T-1 transform library will allow you to iterate through all such possibilities
 
-1)  Object with more nulls trumps object with fewer nulls
-2)  If two objects have same number of nulls, the object with a larger number of smaller strings trumps the
+You can specify optional matches.  For example:
+
+```typescript
+    `const ${obj.varName} = ${obj.varVal}; ${t_1.opt`//${obj.comment}`}`
+```
+
+populates the comment comes after '//', but it is optional.  If no comment characters
+are found, then comment becomes null.
+
