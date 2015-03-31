@@ -37,10 +37,11 @@ var t_1;
             if (parseOptions && parseOptions.ignoreWhitespace) {
                 if (!this._normalizedStrings) {
                     this._normalizedStrings = _.map(this.strings, function (str) {
-                        var trimmed = str.trim();
-                        if (trimmed.indexOf('  ') > -1) {
-                            throw 'not implemented';
-                        }
+                        //var trimmed = str.trim();
+                        //if (trimmed.indexOf('  ') > -1) {
+                        //    throw 'not implemented';
+                        //}
+                        var trimmed = normalizeString(str);
                         return trimmed;
                     });
                 }
@@ -74,7 +75,12 @@ var t_1;
                     if (typeof (propertyPath) === 'string') {
                         var propNameArr = propertyPath.split('.');
                         var dynamicValue = this._stringToParse.substring(iPosOfPointer, iPosOfNextStaticStringToken);
-                        returnObj[propNameArr[1]] = dynamicValue;
+                        if (parseOptions && parseOptions.ignoreWhitespace) {
+                            returnObj[propNameArr[1]] = dynamicValue.trim();
+                        }
+                        else {
+                            returnObj[propNameArr[1]] = dynamicValue;
+                        }
                         iPosOfPointer = iPosOfNextStaticStringToken + stringsToConsider[i].length;
                     }
                     else {
@@ -91,7 +97,12 @@ var t_1;
                 if (typeof dynamicToken === 'string') {
                     var propNameArr = dynamicToken.split('.');
                     var dynamicValue = this._stringToParse.substring(iPosOfPointer);
-                    returnObj[propNameArr[1]] = dynamicValue;
+                    if (parseOptions && parseOptions.ignoreWhitespace) {
+                        returnObj[propNameArr[1]] = dynamicValue.trim();
+                    }
+                    else {
+                        returnObj[propNameArr[1]] = dynamicValue;
+                    }
                 }
                 else {
                     var pog = dynamicToken;
@@ -139,7 +150,7 @@ var t_1;
             }
             else {
                 if (parseOptions && parseOptions.ignoreWhitespace) {
-                    this.posOfHead = value.indexOf(stringSeq[0].trim());
+                    this.posOfHead = value.indexOf(normalizeString(stringSeq[0]));
                 }
                 else {
                     this.posOfHead = value.indexOf(stringSeq[0]);
