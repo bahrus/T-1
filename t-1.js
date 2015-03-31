@@ -32,7 +32,7 @@ var t_1;
                         debugger;
                 }
             }
-            var stringsToSearch = this.strings;
+            //var stringsToSearch = this.strings;
             var stringToParse = s;
             if (parseOptions && parseOptions.ignoreWhitespace) {
                 if (!this._normalizedStrings) {
@@ -44,10 +44,13 @@ var t_1;
                         return trimmed;
                     });
                 }
-                stringsToSearch = this._normalizedStrings;
+                //stringsToSearch = this._normalizedStrings;
                 stringToParse = normalizeString(stringToParse);
             }
-            this._stringMatcher = new StringMatch(stringsToSearch, stringToParse, parseOptions);
+            var stringsToConsider = this._normalizedStrings;
+            if (!stringsToConsider)
+                stringsToConsider = this.strings;
+            this._stringMatcher = new StringMatch(stringsToConsider, stringToParse, parseOptions);
             this._stringToParse = stringToParse;
             return this.process(obj, parseOptions);
         };
@@ -59,6 +62,10 @@ var t_1;
                 returnObj = {};
             //var returnObj = <TObj> genericObj;
             var iValCounter = 0;
+            //console.log(this.values);
+            var stringsToConsider = this._normalizedStrings;
+            if (!stringsToConsider)
+                stringsToConsider = this.strings;
             for (var i = 0, n = sequenceOfPositionsOfStaticsInStringToParse.length; i < n; i++) {
                 var iPosOfNextStaticStringToken = sequenceOfPositionsOfStaticsInStringToParse[i];
                 if (iPosOfNextStaticStringToken > iPosOfPointer) {
@@ -68,19 +75,14 @@ var t_1;
                         var propNameArr = propertyPath.split('.');
                         var dynamicValue = this._stringToParse.substring(iPosOfPointer, iPosOfNextStaticStringToken);
                         returnObj[propNameArr[1]] = dynamicValue;
-                        iPosOfPointer = iPosOfNextStaticStringToken + this.strings[i].length;
+                        iPosOfPointer = iPosOfNextStaticStringToken + stringsToConsider[i].length;
                     }
                     else {
                         debugger;
                     }
                 }
                 else {
-                    if (this._normalizedStrings) {
-                        iPosOfPointer += this._normalizedStrings[i].length;
-                    }
-                    else {
-                        iPosOfPointer += this.strings[i].length;
-                    }
+                    iPosOfPointer += stringsToConsider[i].length;
                 }
             }
             if (iValCounter < this.values.length) {
