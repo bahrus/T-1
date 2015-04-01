@@ -2,8 +2,6 @@
 module t_1{
     
     export interface IParseOptions {
-        //ignoreCase?: boolean;
-        //ignoreWhitespace?: boolean;
         normalizeFunction?: (s: string) => string;
         debug?: string;
         
@@ -15,21 +13,15 @@ module t_1{
 
     export function normalizeString(s: string) {
         var result = '';
-        //var bSpace = false;
         for (var i = 0, n = s.length; i < n; i++) {
             var chr = s[i];
             switch (chr) {
                 case '\n':
                 case '\r':
                 case ' ':
-                    //if (!bSpace) {
-                    //    result += ' ';
-                    //    bSpace = true;
-                    //}
                     break;
                 default:
                     result += chr;
-                    //bSpace = false;
             }
             
         }
@@ -52,7 +44,6 @@ module t_1{
                         debugger;
                 }
             }
-            //var stringsToSearch = this.strings;
             var stringToParse = s;
             if (parseOptions && parseOptions.normalizeFunction) {
                 if (!this._normalizedStrings) {
@@ -62,7 +53,6 @@ module t_1{
                     ;
                     
                 }
-                //stringsToSearch = this._normalizedStrings;
                 stringToParse = normalizeString(stringToParse);
             }
             var stringsToConsider = this._normalizedStrings;
@@ -77,9 +67,7 @@ module t_1{
             var sequenceOfPositionsOfStaticsInStringToParse = this._stringMatcher.posSequence();
             var returnObj = obj;
             if (!returnObj) returnObj = <TObj> {};
-            //var returnObj = <TObj> genericObj;
             var iValCounter = 0;
-            //console.log(this.values);
             var stringsToConsider = this._normalizedStrings;
             if (!stringsToConsider) stringsToConsider = this.strings;
 
@@ -91,11 +79,7 @@ module t_1{
                     if (typeof (propertyPath) === 'string') {
                         var propNameArr = propertyPath.split('.');
                         var dynamicValue = this._stringToParse.substring(iPosOfPointer, iPosOfNextStaticStringToken);
-                        //if (parseOptions && parseOptions.normalizeFunction) {
-                        //    returnObj[propNameArr[1]] = dynamicValue.trim();
-                        //} else {
-                            returnObj[propNameArr[1]] = dynamicValue;
-                        //}
+                        returnObj[propNameArr[1]] = dynamicValue;
                         iPosOfPointer = iPosOfNextStaticStringToken + stringsToConsider[i].length;
                     } else {
                         debugger;
@@ -112,19 +96,11 @@ module t_1{
                 if (typeof dynamicToken === 'string') {
                     var propNameArr = dynamicToken.split('.');
                     var dynamicValue = this._stringToParse.substring(iPosOfPointer);
-                    //if (parseOptions && parseOptions.ignoreWhitespace) {
-                    //    returnObj[propNameArr[1]] = dynamicValue.trim();
-                    //} else {
-                        returnObj[propNameArr[1]] = dynamicValue;
-                    //}
+                    returnObj[propNameArr[1]] = dynamicValue;
                 } else {
                     var pog = <PatternToObjectGenerator<TObj>> dynamicToken;
                     var stringToParse = this._stringToParse.substr(iPosOfPointer);
-                    //if (parseOptions && parseOptions.ignoreWhitespace) {
-                    //    stringToParse = stringToParse.trim();
-                    //}
                     pog.parse(stringToParse, returnObj, parseOptions);
-                    //debugger;
                 }
                 
                 //#endregion
