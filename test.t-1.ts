@@ -56,7 +56,8 @@ describe('t_1.StringMatch',() => {
         var test6 = t_1.compile
             `const    ${obj.varName}=${obj.varVal};${t_1.opt`//${obj.comment}`}`;
         var parseOpts: t_1.IParseOptions = {
-            ignoreWhitespace: true,
+            //ignoreWhitespace: true,
+            normalizeFunction: t_1.normalizeString,
             //debug: 'true',
         };
         var resultObj = test6.parse('const test   =   "hello";      //another comment', null, parseOpts);
@@ -84,7 +85,8 @@ describe('t_1.StringMatch',() => {
                 ${obj.afterText }
             `;
         var parseOpts: t_1.IParseOptions = {
-            ignoreWhitespace: true,
+            //ignoreWhitespace: true,
+            normalizeFunction: t_1.normalizeString,
             //debug: 'true',
         };
         //debugger;

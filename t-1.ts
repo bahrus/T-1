@@ -2,8 +2,9 @@
 module t_1{
     
     export interface IParseOptions {
-        ignoreCase?: boolean;
-        ignoreWhitespace?: boolean;
+        //ignoreCase?: boolean;
+        //ignoreWhitespace?: boolean;
+        normalizeFunction?: (s: string) => string;
         debug?: string;
         
     }
@@ -53,14 +54,10 @@ module t_1{
             }
             //var stringsToSearch = this.strings;
             var stringToParse = s;
-            if (parseOptions && parseOptions.ignoreWhitespace) {
+            if (parseOptions && parseOptions.normalizeFunction) {
                 if (!this._normalizedStrings) {
-                    //this._normalizedStrings = _.map(this.strings, str => {
-                    //    var trimmed = normalizeString(str);
-                    //    return trimmed;
-                    //});
                     this._normalizedStrings = this.strings
-                        .map(str => normalizeString(str))
+                        .map(str => parseOptions.normalizeFunction(str))
                         .filter(str => str.length > 0)
                     ;
                     
@@ -94,11 +91,11 @@ module t_1{
                     if (typeof (propertyPath) === 'string') {
                         var propNameArr = propertyPath.split('.');
                         var dynamicValue = this._stringToParse.substring(iPosOfPointer, iPosOfNextStaticStringToken);
-                        if (parseOptions && parseOptions.ignoreWhitespace) {
-                            returnObj[propNameArr[1]] = dynamicValue.trim();
-                        } else {
+                        //if (parseOptions && parseOptions.normalizeFunction) {
+                        //    returnObj[propNameArr[1]] = dynamicValue.trim();
+                        //} else {
                             returnObj[propNameArr[1]] = dynamicValue;
-                        }
+                        //}
                         iPosOfPointer = iPosOfNextStaticStringToken + stringsToConsider[i].length;
                     } else {
                         debugger;
@@ -115,17 +112,17 @@ module t_1{
                 if (typeof dynamicToken === 'string') {
                     var propNameArr = dynamicToken.split('.');
                     var dynamicValue = this._stringToParse.substring(iPosOfPointer);
-                    if (parseOptions && parseOptions.ignoreWhitespace) {
-                        returnObj[propNameArr[1]] = dynamicValue.trim();
-                    } else {
+                    //if (parseOptions && parseOptions.ignoreWhitespace) {
+                    //    returnObj[propNameArr[1]] = dynamicValue.trim();
+                    //} else {
                         returnObj[propNameArr[1]] = dynamicValue;
-                    }
+                    //}
                 } else {
                     var pog = <PatternToObjectGenerator<TObj>> dynamicToken;
                     var stringToParse = this._stringToParse.substr(iPosOfPointer);
-                    if (parseOptions && parseOptions.ignoreWhitespace) {
-                        stringToParse = stringToParse.trim();
-                    }
+                    //if (parseOptions && parseOptions.ignoreWhitespace) {
+                    //    stringToParse = stringToParse.trim();
+                    //}
                     pog.parse(stringToParse, returnObj, parseOptions);
                     //debugger;
                 }
@@ -159,8 +156,8 @@ module t_1{
             if (stringSeq[0].length === 0) {
                 this.posOfHead = -1;
             } else {
-                if (parseOptions && parseOptions.ignoreWhitespace) {
-                    this.posOfHead = value.indexOf(normalizeString(stringSeq[0]));
+                if (parseOptions && parseOptions.normalizeFunction) {
+                    this.posOfHead = value.indexOf(parseOptions.normalizeFunction(stringSeq[0]));
                 } else {
                     this.posOfHead = value.indexOf(stringSeq[0]);
                 }
