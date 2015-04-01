@@ -66,4 +66,38 @@ describe('t_1.StringMatch',() => {
             comment: 'another comment'
         });
     });
+    it(`Test 7.  Parse xml where order doesn't matter ignore whitespace`,() => {
+        var obj = {
+            beforeText: 'obj.beforeText',
+            option1: 'obj.option1',
+            option2: 'obj.option2',
+            afterText: 'obj.afterText'
+        };
+        var test7 = t_1.compile
+            `
+                ${obj.beforeText}
+                <select>
+                    <option>${obj.option1}</option>
+                    <option>${obj.option2}</option>
+                </select>
+                ${obj.afterText }
+            `;
+        var parseOpts: t_1.IParseOptions = {
+            ignoreWhitespace: true,
+            //debug: 'true',
+        };
+        debugger;
+        var resultObj = test7.parse(`
+            <html>
+                <head>
+                    <title>My Document</title>
+                </head>
+                <body>
+                    <select><option>test1</option><option>test2</option></select>
+                </body>
+            </html>
+            `, null, parseOpts);
+        debugger;
+        chai.expect(resultObj['option1']).to.equal('test1');
+    });
 });

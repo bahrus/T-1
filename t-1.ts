@@ -17,17 +17,22 @@ module t_1{
         var bSpace = false;
         for (var i = 0, n = s.length; i < n; i++) {
             var chr = s[i];
-            if (chr === ' ') {
-                if (!bSpace) {
+            switch (chr) {
+                case '\n':
+                case '\r':
+                case ' ':
+                    if (!bSpace) {
+                        result += ' ';
+                        bSpace = true;
+                    }
+                    break;
+                default:
                     result += chr;
-                    bSpace = true;
-                }
-            } else {
-                result += chr;
-                bSpace = false;
+                    bSpace = false;
             }
+            
         }
-        return result;
+        return result.trim();
     }
     
 
@@ -50,14 +55,15 @@ module t_1{
             var stringToParse = s;
             if (parseOptions && parseOptions.ignoreWhitespace) {
                 if (!this._normalizedStrings) {
-                    this._normalizedStrings = _.map(this.strings, str => {
-                        //var trimmed = str.trim();
-                        //if (trimmed.indexOf('  ') > -1) {
-                        //    throw 'not implemented';
-                        //}
-                        var trimmed = normalizeString(str);
-                        return trimmed;
-                    });
+                    //this._normalizedStrings = _.map(this.strings, str => {
+                    //    var trimmed = normalizeString(str);
+                    //    return trimmed;
+                    //});
+                    this._normalizedStrings = this.strings
+                        .map(str => normalizeString(str))
+                        .filter(str => str.length > 0)
+                    ;
+                    
                 }
                 //stringsToSearch = this._normalizedStrings;
                 stringToParse = normalizeString(stringToParse);
