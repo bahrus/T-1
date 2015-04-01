@@ -14,21 +14,21 @@ module t_1{
 
     export function normalizeString(s: string) {
         var result = '';
-        var bSpace = false;
+        //var bSpace = false;
         for (var i = 0, n = s.length; i < n; i++) {
             var chr = s[i];
             switch (chr) {
                 case '\n':
                 case '\r':
                 case ' ':
-                    if (!bSpace) {
-                        result += ' ';
-                        bSpace = true;
-                    }
+                    //if (!bSpace) {
+                    //    result += ' ';
+                    //    bSpace = true;
+                    //}
                     break;
                 default:
                     result += chr;
-                    bSpace = false;
+                    //bSpace = false;
             }
             
         }

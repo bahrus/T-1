@@ -60,10 +60,11 @@ describe('t_1.StringMatch',() => {
             //debug: 'true',
         };
         var resultObj = test6.parse('const test   =   "hello";      //another comment', null, parseOpts);
+        //debugger;
         chai.expect(resultObj).to.deep.equal({
             varName: 'test',
             varVal: '"hello"',
-            comment: 'another comment'
+            comment: 'anothercomment'
         });
     });
     it(`Test 7.  Parse xml where order doesn't matter ignore whitespace`,() => {
@@ -86,7 +87,7 @@ describe('t_1.StringMatch',() => {
             ignoreWhitespace: true,
             //debug: 'true',
         };
-        debugger;
+        //debugger;
         var resultObj = test7.parse(`
             <html>
                 <head>
@@ -97,7 +98,7 @@ describe('t_1.StringMatch',() => {
                 </body>
             </html>
             `, null, parseOpts);
-        debugger;
+        //debugger;
         chai.expect(resultObj['option1']).to.equal('test1');
     });
 });

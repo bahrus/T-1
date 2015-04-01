@@ -3,21 +3,15 @@ var t_1;
 (function (t_1) {
     function normalizeString(s) {
         var result = '';
-        var bSpace = false;
         for (var i = 0, n = s.length; i < n; i++) {
             var chr = s[i];
             switch (chr) {
                 case '\n':
                 case '\r':
                 case ' ':
-                    if (!bSpace) {
-                        result += ' ';
-                        bSpace = true;
-                    }
                     break;
                 default:
                     result += chr;
-                    bSpace = false;
             }
         }
         return result.trim();
