@@ -11,7 +11,7 @@ module t_1{
         parse: (s: string, parseOptions?: IParseOptions) => TObj | TObj[];
     }
 
-    export function normalizeString(s: string) {
+    export function removeWhitespace(s: string) {
         var result = '';
         for (var i = 0, n = s.length; i < n; i++) {
             var chr = s[i];
@@ -25,9 +25,85 @@ module t_1{
             }
             
         }
-        return result.trim();
+        return result;
+    }
+
+    var chrCodeFora = 'a'.charCodeAt(0);
+    var chrCodeForZ = 'z'.charCodeAt(0);
+    var chrCodeFor$ = '$'.charCodeAt(0);
+    var chrCodeFor_ = '_'.charCodeAt(0);
+    var chrCodeFor0 = '0'.charCodeAt(0);
+    var chrCodeFor9 = '9'.charCodeAt(9);
+
+
+    function isAlpha(c: string) {
+        var chrCode = c.charCodeAt(0);
+        if (chrCode >= chrCodeFora && chrCode <= chrCodeForZ) return true;
+        switch (chrCode) {
+            case chrCodeFor_:
+            case chrCodeFor$:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    function isAlphaNumeric(c: string) {
+        return isAlpha(c) || isNumeric(c);
+    }
+
+    function isNumeric(c: string) {
+        var chrCode = c.charCodeAt(0);
+        return chrCode >= chrCodeFor0 && chrCode <= chrCodeFor9;
     }
     
+    export function removeWhitespaceInJS(s: string) {
+        console.log('removeWhitespaceInJs for s = ' + s);
+        var result = '';
+        var bInsideComment = false;
+        //var bFirstSpaceEncountered = false;
+        var lastChrAlphaNumeric = false;
+        
+        for (var i = 0, n = s.length; i < n; i++) {
+            var chr = s[i];
+            if (bInsideComment) {
+                result += chr;
+                continue;
+            }
+            switch (chr) {
+                case ' ':
+                    //if (lastChrAlphaNumeric) {
+                    //    //next non space must be non alpha
+                    //}
+                    
+                    //if (!bFirstSpaceEncountered) {
+                    //    result += chr;
+                    //    bFirstSpaceEncountered = true;
+                    //}
+                    break;
+                case '/':
+                    if ((i < n - 1) && s[i + 1] === '/') {
+                        bInsideComment = true;
+                        result += chr;
+                    }
+                    break;
+                default:
+                    result += chr;
+                    lastChrAlphaNumeric = isAlpha(chr) || (lastChrAlphaNumeric && isNumeric(chr));
+            }
+
+        }
+        //var finalResult = '';
+        //for (var i = 0, n = result.length; i < n; i++) {
+        //    var chr = result[i];
+        //    switch (chr) {
+        //        case ' ':
+
+        //    }
+        //}
+        console.log('result: ' + result);
+        return result;
+    }
 
     export class PatternToObjectGenerator<TObj> implements IPatternToObjectGenerator<TObj>{
         private _stringMatcher: StringMatch;
@@ -53,7 +129,7 @@ module t_1{
                     ;
                     
                 }
-                stringToParse = normalizeString(stringToParse);
+                stringToParse = parseOptions.normalizeFunction(stringToParse);
             }
             var stringsToConsider = this._normalizedStrings;
             if (!stringsToConsider) stringsToConsider = this.strings;

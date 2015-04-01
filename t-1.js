@@ -1,7 +1,7 @@
 ///<reference path='Scripts/typings/lodash/lodash.d.ts'/>
 var t_1;
 (function (t_1) {
-    function normalizeString(s) {
+    function removeWhitespace(s) {
         var result = '';
         for (var i = 0, n = s.length; i < n; i++) {
             var chr = s[i];
@@ -14,9 +14,71 @@ var t_1;
                     result += chr;
             }
         }
-        return result.trim();
+        return result;
     }
-    t_1.normalizeString = normalizeString;
+    t_1.removeWhitespace = removeWhitespace;
+    var chrCodeFora = 'a'.charCodeAt(0);
+    var chrCodeForZ = 'z'.charCodeAt(0);
+    var chrCodeFor$ = '$'.charCodeAt(0);
+    var chrCodeFor_ = '_'.charCodeAt(0);
+    var chrCodeFor0 = '0'.charCodeAt(0);
+    var chrCodeFor9 = '9'.charCodeAt(9);
+    function isAlpha(c) {
+        var chrCode = c.charCodeAt(0);
+        if (chrCode >= chrCodeFora && chrCode <= chrCodeForZ)
+            return true;
+        switch (chrCode) {
+            case chrCodeFor_:
+            case chrCodeFor$:
+                return true;
+            default:
+                return false;
+        }
+    }
+    function isAlphaNumeric(c) {
+        return isAlpha(c) || isNumeric(c);
+    }
+    function isNumeric(c) {
+        var chrCode = c.charCodeAt(0);
+        return chrCode >= chrCodeFor0 && chrCode <= chrCodeFor9;
+    }
+    function removeWhitespaceInJS(s) {
+        console.log('removeWhitespaceInJs for s = ' + s);
+        var result = '';
+        var bInsideComment = false;
+        //var bFirstSpaceEncountered = false;
+        var lastChrAlphaNumeric = false;
+        for (var i = 0, n = s.length; i < n; i++) {
+            var chr = s[i];
+            if (bInsideComment) {
+                result += chr;
+                continue;
+            }
+            switch (chr) {
+                case ' ':
+                    break;
+                case '/':
+                    if ((i < n - 1) && s[i + 1] === '/') {
+                        bInsideComment = true;
+                        result += chr;
+                    }
+                    break;
+                default:
+                    result += chr;
+                    lastChrAlphaNumeric = isAlpha(chr) || (lastChrAlphaNumeric && isNumeric(chr));
+            }
+        }
+        //var finalResult = '';
+        //for (var i = 0, n = result.length; i < n; i++) {
+        //    var chr = result[i];
+        //    switch (chr) {
+        //        case ' ':
+        //    }
+        //}
+        console.log('result: ' + result);
+        return result;
+    }
+    t_1.removeWhitespaceInJS = removeWhitespaceInJS;
     var PatternToObjectGenerator = (function () {
         function PatternToObjectGenerator(strings, values) {
             this.strings = strings;
@@ -34,7 +96,7 @@ var t_1;
                 if (!this._normalizedStrings) {
                     this._normalizedStrings = this.strings.map(function (str) { return parseOptions.normalizeFunction(str); }).filter(function (str) { return str.length > 0; });
                 }
-                stringToParse = normalizeString(stringToParse);
+                stringToParse = parseOptions.normalizeFunction(stringToParse);
             }
             var stringsToConsider = this._normalizedStrings;
             if (!stringsToConsider)

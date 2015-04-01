@@ -51,14 +51,15 @@ describe('t_1.StringMatch', function () {
         var test6 = t_1.compile `const    ${obj.varName}=${obj.varVal};${t_1.opt `//${obj.comment}`}`;
         var parseOpts = {
             //ignoreWhitespace: true,
-            normalizeFunction: t_1.normalizeString,
+            normalizeFunction: t_1.removeWhitespaceInJS,
         };
-        var resultObj = test6.parse('const test   =   "hello";      //another comment', null, parseOpts);
+        //debugger;
+        var resultObj = test6.parse('const test   =   "hello";      //another     comment', null, parseOpts);
         //debugger;
         chai.expect(resultObj).to.deep.equal({
             varName: 'test',
             varVal: '"hello"',
-            comment: 'anothercomment'
+            comment: 'another     comment'
         });
     });
     it(`Test 7.  Parse xml where order doesn't matter ignore whitespace`, function () {
@@ -77,8 +78,7 @@ describe('t_1.StringMatch', function () {
                 ${obj.afterText}
             `;
         var parseOpts = {
-            //ignoreWhitespace: true,
-            normalizeFunction: t_1.normalizeString,
+            normalizeFunction: t_1.removeWhitespace,
         };
         //debugger;
         var resultObj = test7.parse(`
