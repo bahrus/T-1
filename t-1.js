@@ -79,6 +79,32 @@ var t_1;
         return result;
     }
     t_1.removeWhitespaceInJS = removeWhitespaceInJS;
+    function normalizeXML(s) {
+        var result = '';
+        var lastNonSpaceChar = '';
+        var bFirstSpace = true;
+        for (var i = 0, n = s.length; i < n; i++) {
+            var chr = s[i];
+            switch (chr) {
+                case '\n':
+                case '\r':
+                case ' ':
+                    if (bFirstSpace && lastNonSpaceChar !== '>') {
+                        result += ' ';
+                        bFirstSpace = false;
+                    }
+                    break;
+                default:
+                    result += chr;
+                    lastNonSpaceChar = chr;
+                    bFirstSpace = true;
+            }
+        }
+        result = result.trim();
+        //console.log('result = ' + result);
+        return result;
+    }
+    t_1.normalizeXML = normalizeXML;
     var PatternToObjectGenerator = (function () {
         function PatternToObjectGenerator(strings, values) {
             this.strings = strings;

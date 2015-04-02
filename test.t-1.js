@@ -78,7 +78,7 @@ describe('t_1.StringMatch', function () {
                 ${obj.afterText}
             `;
         var parseOpts = {
-            normalizeFunction: t_1.removeWhitespace,
+            normalizeFunction: t_1.normalizeXML,
         };
         //debugger;
         var resultObj = test7.parse(`
@@ -87,12 +87,11 @@ describe('t_1.StringMatch', function () {
                     <title>My Document</title>
                 </head>
                 <body>
-                    <select><option>test1</option><option>test2</option></select>
+                    <select><option>test 1</option><option>test2</option></select>
                 </body>
             </html>
             `, null, parseOpts);
-        //debugger;
-        chai.expect(resultObj['option1']).to.equal('test1');
+        chai.expect(resultObj['option1']).to.equal('test 1');
     });
 });
 //# sourceMappingURL=test.t-1.js.map

@@ -105,6 +105,33 @@ module t_1{
         return result;
     }
 
+    export function normalizeXML(s: string) {
+        var result = '';
+        var lastNonSpaceChar = '';
+        var bFirstSpace = true;
+        for (var i = 0, n = s.length; i < n; i++) {
+            var chr = s[i];
+            switch (chr) {
+                case '\n':
+                case '\r':
+                case ' ':
+                    if (bFirstSpace && lastNonSpaceChar !== '>') {
+                        result += ' ';
+                        bFirstSpace = false;
+                    }
+                    break;
+                default:
+                    result += chr;
+                    lastNonSpaceChar = chr;
+                    bFirstSpace = true;
+            }
+
+        }
+        result = result.trim();
+        //console.log('result = ' + result);
+        return result;
+    }
+
     export class PatternToObjectGenerator<TObj> implements IPatternToObjectGenerator<TObj>{
         private _stringMatcher: StringMatch;
         private _stringToParse: string;
