@@ -1,8 +1,8 @@
 # T<sup>-1</sup>
-EcmaScript 6's Template String in by
+EcmaScript 6's Template String in reverse.
 
 EcmaScript 6 introduces the [Template String] (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/template_strings),
-which supports binding to Javascript expressions.  A common use case for this feature is for "stringifying" a JavaScript object.
+which supports binding to JavaScript expressions.  A common use case for this feature is for "stringifying" a JavaScript object.
 
 For example:
 
@@ -12,7 +12,7 @@ For example:
         lastName:  'Ford'
     };
 
-    console.log(`Hello, ${customerInfo.firstName} ${customerInfo.lastName`,)
+    console.log(`Hello, ${customerInfo.firstName} ${customerInfo.lastName`)
     //output:  "Hello, Harrison Ford"
 ```
 
@@ -24,7 +24,15 @@ string:
 ```
 
 What T<sup>-1</sup> does is reverse the process.  Given a template string, and the result of this transform, find an object which would generate such
-a string.  Of course, like many equations in mathematics, there may be no such object which will work, or there could be multiple objects which produce
+a string.  Why is this useful?  The library is meant to provide an easy way to parse strings, as an alternative to regular expressions.  
+It is inspired by the library [xregexp] (http://xregexp.com/).  This library allows you to embed property names
+into the expression which get populated.  The advantages of T<sup>-1</sup> over xregexp are:
+
+*  The property names can be verified via a type checker such as Typescript, and benefit from intellisense.
+*  Using decorators, we can greatly simplify the syntax of patterns to match.
+
+
+Of course, like many equations in mathematics, there may be no such object which will work, or there could be multiple objects which produce
 the same output when applied to the template string.  To take some examples, suppose the template string
 
 ```typescript
@@ -41,7 +49,7 @@ obj.stringProperty1 = "Is ";
 obj.stringProperty2 = "is ";
 obj.stringProperty3 = "e face that launched a thousand ships?";
 
-The T-1 transform library will allow you to iterate through all such possibilities
+The T-1 transform library will allow you to iterate through all such possibilities, and pick the best fit based on custom rules.
 
 You can specify optional matches.  For example:
 
@@ -49,6 +57,6 @@ You can specify optional matches.  For example:
     `const ${obj.varName} = ${obj.varVal}; ${t_1.opt`//${obj.comment}`}`
 ```
 
-populates the comment comes after '//', but it is optional.  If no comment characters
-are found, then comment becomes null.
+populates the comment property of the object, if something comes after '//', but it is optional.  If no comment characters
+are found, then the comment property is not populated.
 

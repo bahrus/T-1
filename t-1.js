@@ -179,6 +179,19 @@ var t_1;
         return PatternToObjectGenerator;
     })();
     t_1.PatternToObjectGenerator = PatternToObjectGenerator;
+    var PatternToObjectGenerator2 = (function () {
+        function PatternToObjectGenerator2(strings, values) {
+            this.strings = strings;
+            this.values = values;
+            var sValues = values.map(function (sym) {
+            });
+        }
+        PatternToObjectGenerator2.prototype.parse = function (s, obj, parseOptions) {
+            return null;
+        };
+        return PatternToObjectGenerator2;
+    })();
+    t_1.PatternToObjectGenerator2 = PatternToObjectGenerator2;
     function compile(strings) {
         var values = [];
         for (var _i = 1; _i < arguments.length; _i++) {
@@ -187,6 +200,15 @@ var t_1;
         return new PatternToObjectGenerator(strings, values);
     }
     t_1.compile = compile;
+    function compile2(strings) {
+        var values = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            values[_i - 1] = arguments[_i];
+        }
+        debugger;
+        return new PatternToObjectGenerator2(strings, values);
+    }
+    t_1.compile2 = compile2;
     function opt(strings) {
         var values = [];
         for (var _i = 1; _i < arguments.length; _i++) {

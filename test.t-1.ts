@@ -102,4 +102,17 @@ describe('t_1.StringMatch',() => {
             `, null, parseOpts);
         chai.expect(resultObj['option1']).to.equal('test 1');
     });
+
+    it(`Test 8.  Use of Symbols`,() => {
+        var obj = {
+            varName:    Symbol(),
+            varVal:     Symbol(),
+            comment:    Symbol(),
+        };
+        var compiler = new t_1.TemplateCompiler(obj);
+        console.log(obj);
+        var test8 = compiler.compile
+            `const    ${obj.varName}=${obj.varVal};${t_1.opt`//${<string>obj.comment}`}`;
+
+    });
 });

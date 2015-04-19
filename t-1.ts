@@ -212,8 +212,33 @@ module t_1{
         }
     }
 
+    export class PatternToObjectGenerator2<TObj> implements IPatternToObjectGenerator<TObj>{
+        private _patternToObjectGenerator : PatternToObjectGenerator<TObj>;
+        constructor(public strings: string[], public values: Symbol[]) {
+            var sValues = values.map(sym => {
+                for(var key in 
+            });
+        }
+        public parse(s: string, obj?: TObj, parseOptions?: IParseOptions): TObj {
+            return null;
+        }
+    }
+
     export function compile<TObj>(strings : string[], ...values : string[]): PatternToObjectGenerator<TObj> {
         return new PatternToObjectGenerator<TObj>(strings, values);
+    }
+
+    export function compile2<TObj>(strings: string[], ...values: Symbol[]): PatternToObjectGenerator2<TObj> {
+        debugger;
+        return new PatternToObjectGenerator2<TObj>(strings, values);
+    }
+
+    export class TemplateCompiler<TObj>{
+        constructor(public obj: TObj) {
+        }
+
+        public compile(strings: string[], ...values: Symbol[]) {
+        }
     }
 
     export function opt<TObj>(strings: string[], ...values: string[]){
