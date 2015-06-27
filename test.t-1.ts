@@ -5,41 +5,41 @@
 
 describe('t_1.StringMatch',() => {
     it('Test 1.  No matches',() => {
-        var test1 = new t_1.StringMatch(['doesNotExist'], 'I am here');
+        const test1 = new t_1.StringMatch(['doesNotExist'], 'I am here');
         chai.expect(test1.posOfHead).to.equal(-1);
     });
     it('Test 2.  A match',() => {
-        var test2 = new t_1.StringMatch(['th', 'th'], 'Is this the face that launched a thousand ships?');
+        const test2 = new t_1.StringMatch(['th', 'th'], 'Is this the face that launched a thousand ships?');
         chai.expect(test2.posOfHead).to.equal(3);
     });
     it('Test 3. get sequence',() => {
-        var test3 = new t_1.StringMatch(['th', 'th'], 'Is this the face that launched a thousand ships?');
-        var seq = test3.posSequence();
+        const test3 = new t_1.StringMatch(['th', 'th'], 'Is this the face that launched a thousand ships?');
+        const seq = test3.posSequence();
         chai.expect(seq).to.deep.equal([3, 8]);
     });
     it('Test 4.  generate object',() => {
-        var obj = {
+        const obj = {
             prop1: 'obj.prop1',
             prop2: 'obj.prop2'
         };
         //var test4 = new t_1.StringMatch(['th', 'th'], 'Is this the face that launched a thousand ships?');
-        var test4 = t_1.compile
+        const test4 = t_1.compile
             `Hello, ${obj.prop1} : ${obj.prop2} can you`;
-        var resultObj = test4.parse('Hello, monsieur : how can you');
+        const resultObj = test4.parse('Hello, monsieur : how can you');
         chai.expect(resultObj).to.deep.equal({
             prop1: 'monsieur',
             prop2: 'how',
         });
     });
     it ('Test 5.  parse InactiveScript', () => {
-        var obj = {
+        const obj = {
             varName: 'obj.varName',
             varVal: 'obj.varVal',
             comment: 'obj.comment'
         };
-        var test5 = t_1.compile
+        const test5 = t_1.compile
             `const ${obj.varName} = ${obj.varVal}; ${t_1.opt`//${obj.comment}`}`
-        var resultObj = test5.parse('const test = "hello"; //some comment');
+        const resultObj = test5.parse('const test = "hello"; //some comment');
         //debugger;
         chai.expect(resultObj).to.deep.equal({
             varName: 'test',
@@ -48,20 +48,20 @@ describe('t_1.StringMatch',() => {
         });
     });
     it ('Test 6.  Parse InactiveScript, ignore whitespace', () => {
-        var obj = {
+        const obj = {
             varName: 'obj.varName',
             varVal: 'obj.varVal',
             comment: 'obj.comment'
         };
-        var test6 = t_1.compile
+        const test6 = t_1.compile
             `const    ${obj.varName}=${obj.varVal};${t_1.opt`//${obj.comment}`}`;
-        var parseOpts: t_1.IParseOptions = {
+        const parseOpts: t_1.IParseOptions = {
             //ignoreWhitespace: true,
             normalizeFunction: t_1.removeWhitespaceInJS,
             //debug: 'true',
         };
         //debugger;
-        var resultObj = test6.parse('const test   =   "hello";      //another     comment', null, parseOpts);
+        const resultObj = test6.parse('const test   =   "hello";      //another     comment', null, parseOpts);
         //debugger;
         chai.expect(resultObj).to.deep.equal({
             varName: 'test',
@@ -70,13 +70,13 @@ describe('t_1.StringMatch',() => {
         });
     });
     it(`Test 7.  Parse xml where order doesn't matter ignore whitespace`,() => {
-        var obj = {
+        const obj = {
             beforeText: 'obj.beforeText',
             option1: 'obj.option1',
             option2: 'obj.option2',
             afterText: 'obj.afterText'
         };
-        var test7 = t_1.compile
+        const test7 = t_1.compile
             `
                 ${obj.beforeText}
                 <select>
@@ -85,12 +85,12 @@ describe('t_1.StringMatch',() => {
                 </select>
                 ${obj.afterText }
             `;
-        var parseOpts: t_1.IParseOptions = {
+        const parseOpts: t_1.IParseOptions = {
             normalizeFunction: t_1.normalizeXML,
             //debug: 'true',
         };
         //debugger;
-        var resultObj = test7.parse(`
+        const resultObj = test7.parse(`
             <html>
                 <head>
                     <title>My Document</title>
@@ -104,15 +104,46 @@ describe('t_1.StringMatch',() => {
     });
 
     it(`Test 8.  Use of Symbols`,() => {
-        var obj = {
+        const obj = {
             varName:    Symbol(),
             varVal:     Symbol(),
             comment:    Symbol(),
         };
-        var compiler = new t_1.TemplateCompiler(obj);
+        const compiler = new t_1.TemplateCompiler(obj);
         console.log(obj);
-        var test8 = compiler.compile
+        const test8 = compiler.compile
             `const    ${obj.varName}=${obj.varVal};${t_1.opt`//${<string>obj.comment}`}`;
+        const parseOpts: t_1.IParseOptions = {
+            //ignoreWhitespace: true,
+            normalizeFunction: t_1.removeWhitespaceInJS,
+            //debug: 'true',
+        };
+        //var resultObj = test8.parse('const test   =   "hello";      //another     comment', null, parseOpts);
+    });
+    it(`Test 9.  Use of reflection with metadata`, () => {
+        const obj = {
+            properties: {
+                varName: {
+                    path: 'obj.varName'
+                },
+                varVal: {
+                    path: 'obj.varVal'
+                },
+                comment: {
+                    path: 'obj.comment'
+                }
+            }
 
+        };
+        const test9 = t_1.compile
+            `const    ${obj.properties.varName.path}=${obj.properties.varVal.path};${t_1.opt`//${obj.properties.comment.path}`}`;
+        const parseOpts: t_1.IParseOptions = {
+            //ignoreWhitespace: true,
+            normalizeFunction: t_1.removeWhitespaceInJS,
+            //debug: 'true',
+        };
+        const resultObj = test9.parse('const test   =   "hello";      //another     comment', null, parseOpts);
+        console.log('test9 =>');
+        console.log(resultObj);
     });
 });

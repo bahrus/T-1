@@ -56,6 +56,13 @@ var t_1;
             }
             switch (chr) {
                 case ' ':
+                    //if (lastChrAlphaNumeric) {
+                    //    //next non space must be non alpha
+                    //}
+                    //if (!bFirstSpaceEncountered) {
+                    //    result += chr;
+                    //    bFirstSpaceEncountered = true;
+                    //}
                     break;
                 case '/':
                     if ((i < n - 1) && s[i + 1] === '/') {
@@ -120,7 +127,9 @@ var t_1;
             var stringToParse = s;
             if (parseOptions && parseOptions.normalizeFunction) {
                 if (!this._normalizedStrings) {
-                    this._normalizedStrings = this.strings.map(function (str) { return parseOptions.normalizeFunction(str); }).filter(function (str) { return str.length > 0; });
+                    this._normalizedStrings = this.strings
+                        .map(function (str) { return parseOptions.normalizeFunction(str); })
+                        .filter(function (str) { return str.length > 0; });
                 }
                 stringToParse = parseOptions.normalizeFunction(stringToParse);
             }
@@ -179,19 +188,17 @@ var t_1;
         return PatternToObjectGenerator;
     })();
     t_1.PatternToObjectGenerator = PatternToObjectGenerator;
-    var PatternToObjectGenerator2 = (function () {
-        function PatternToObjectGenerator2(strings, values) {
-            this.strings = strings;
-            this.values = values;
-            var sValues = values.map(function (sym) {
-            });
-        }
-        PatternToObjectGenerator2.prototype.parse = function (s, obj, parseOptions) {
-            return null;
-        };
-        return PatternToObjectGenerator2;
-    })();
-    t_1.PatternToObjectGenerator2 = PatternToObjectGenerator2;
+    //export class PatternToObjectGenerator2<TObj> implements IPatternToObjectGenerator<TObj>{
+    //    private _patternToObjectGenerator : PatternToObjectGenerator<TObj>;
+    //    constructor(public strings: string[], public values: Symbol[]) {
+    //        var sValues = values.map(sym => {
+    //            for(var key in 
+    //        });
+    //    }
+    //    public parse(s: string, obj?: TObj, parseOptions?: IParseOptions): TObj {
+    //        return null;
+    //    }
+    //}
     function compile(strings) {
         var values = [];
         for (var _i = 1; _i < arguments.length; _i++) {
@@ -200,15 +207,17 @@ var t_1;
         return new PatternToObjectGenerator(strings, values);
     }
     t_1.compile = compile;
-    function compile2(strings) {
-        var values = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            values[_i - 1] = arguments[_i];
+    //export function compile2<TObj>(strings: string[], ...values: Symbol[]): PatternToObjectGenerator2<TObj> {
+    //    debugger;
+    //    return new PatternToObjectGenerator2<TObj>(strings, values);
+    //}
+    var TemplateCompiler = (function () {
+        function TemplateCompiler(obj) {
+            this.obj = obj;
         }
-        debugger;
-        return new PatternToObjectGenerator2(strings, values);
-    }
-    t_1.compile2 = compile2;
+        return TemplateCompiler;
+    })();
+    t_1.TemplateCompiler = TemplateCompiler;
     function opt(strings) {
         var values = [];
         for (var _i = 1; _i < arguments.length; _i++) {
@@ -244,7 +253,7 @@ var t_1;
             }
             if (this.posOfHead > -1) {
                 var restOfString = value.substr(this.posOfHead + stringSeq[0].length);
-                this.tail = new StringMatch(_.tail(stringSeq), restOfString, parseOptions);
+                this.tail = new StringMatch(stringSeq.slice(1), restOfString, parseOptions);
             }
         }
         StringMatch.prototype.next = function () {
@@ -256,7 +265,7 @@ var t_1;
             this.posOfHead = this.value.indexOf(this.stringSeq[0], this.posOfHead + this.stringSeq[0].length);
             if (this.posOfHead > -1) {
                 var restOfString = this.value.substr(this.posOfHead + this.stringSeq[0].length);
-                this.tail = new StringMatch(_.tail(this.stringSeq), restOfString, this.parseOptions);
+                this.tail = new StringMatch(this.stringSeq.slice(1), restOfString, this.parseOptions);
             }
             return this.posOfHead;
         };
@@ -272,4 +281,3 @@ var t_1;
     })();
     t_1.StringMatch = StringMatch;
 })(t_1 || (t_1 = {}));
-//# sourceMappingURL=t-1.js.map
