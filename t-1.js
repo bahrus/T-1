@@ -1,4 +1,4 @@
-///<reference path='Scripts/typings/lodash/lodash.d.ts'/>
+///<reference path='Scripts/typings/node/node.d.ts'/>
 var t_1;
 (function (t_1) {
     function removeWhitespace(s) {
@@ -281,3 +281,19 @@ var t_1;
     })();
     t_1.StringMatch = StringMatch;
 })(t_1 || (t_1 = {}));
+(function (__global) {
+    if (typeof __global.t_1 !== "undefined") {
+        if (__global.t_1 !== t_1) {
+            for (var p in t_1) {
+                __global.t_1[p] = t_1[p];
+            }
+        }
+    }
+    else {
+        __global.t_1 = t_1;
+    }
+})(typeof window !== "undefined" ? window :
+    typeof WorkerGlobalScope !== "undefined" ? self :
+        typeof global !== "undefined" ? global :
+            Function("return this;")());
+//# sourceMappingURL=t-1.js.map

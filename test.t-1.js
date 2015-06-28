@@ -25,7 +25,7 @@ describe('t_1.StringMatch', function () {
         var resultObj = test4.parse('Hello, monsieur : how can you');
         chai.expect(resultObj).to.deep.equal({
             prop1: 'monsieur',
-            prop2: 'how'
+            prop2: 'how',
         });
         var _a;
     });
@@ -54,7 +54,7 @@ describe('t_1.StringMatch', function () {
         var test6 = (_a = ["const    ", "=", ";", ""], _a.raw = ["const    ", "=", ";", ""], t_1.compile(_a, obj.varName, obj.varVal, (_b = ["//", ""], _b.raw = ["//", ""], t_1.opt(_b, obj.comment))));
         var parseOpts = {
             //ignoreWhitespace: true,
-            normalizeFunction: t_1.removeWhitespaceInJS
+            normalizeFunction: t_1.removeWhitespaceInJS,
         };
         //debugger;
         var resultObj = test6.parse('const test   =   "hello";      //another     comment', null, parseOpts);
@@ -75,7 +75,7 @@ describe('t_1.StringMatch', function () {
         };
         var test7 = (_a = ["\n                ", "\n                <select>\n                    <option>", "</option>\n                    <option>", "</option>\n                </select>\n                ", "\n            "], _a.raw = ["\n                ", "\n                <select>\n                    <option>", "</option>\n                    <option>", "</option>\n                </select>\n                ", "\n            "], t_1.compile(_a, obj.beforeText, obj.option1, obj.option2, obj.afterText));
         var parseOpts = {
-            normalizeFunction: t_1.normalizeXML
+            normalizeFunction: t_1.normalizeXML,
         };
         //debugger;
         var resultObj = test7.parse("\n            <html>\n                <head>\n                    <title>My Document</title>\n                </head>\n                <body>\n                    <select><option>test 1</option><option>test2</option></select>\n                </body>\n            </html>\n            ", null, parseOpts);
@@ -116,7 +116,7 @@ describe('t_1.StringMatch', function () {
         var test9 = (_a = ["const    ", "=", ";", ""], _a.raw = ["const    ", "=", ";", ""], t_1.compile(_a, obj.properties.varName.path, obj.properties.varVal.path, (_b = ["//", ""], _b.raw = ["//", ""], t_1.opt(_b, obj.properties.comment.path))));
         var parseOpts = {
             //ignoreWhitespace: true,
-            normalizeFunction: t_1.removeWhitespaceInJS
+            normalizeFunction: t_1.removeWhitespaceInJS,
         };
         var resultObj = test9.parse('const test   =   "hello";      //another     comment', null, parseOpts);
         console.log('test9 =>');
@@ -124,3 +124,4 @@ describe('t_1.StringMatch', function () {
         var _a, _b;
     });
 });
+//# sourceMappingURL=test.t-1.js.map

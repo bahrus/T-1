@@ -1,5 +1,7 @@
-﻿///<reference path='Scripts/typings/lodash/lodash.d.ts'/>
+﻿///<reference path='Scripts/typings/node/node.d.ts'/>
 module t_1{
+    
+    
     
     export interface IParseOptions {
         normalizeFunction?: (s: string) => string;
@@ -291,4 +293,25 @@ module t_1{
             return tailSeq;
         }
     }
+    
+    
 }
+
+// hook global t_1
+declare var WorkerGlobalScope: any;
+    (function(__global: any) {
+        if (typeof __global.t_1 !== "undefined") {
+            if (__global.t_1 !== t_1) {
+                for (var p in t_1) {
+                    __global.t_1[p] = (<any>t_1)[p];
+                }
+            }
+        }
+        else {
+            __global.t_1 = t_1;
+        }
+    })(
+        typeof window !== "undefined" ? window :
+            typeof WorkerGlobalScope !== "undefined" ? self :
+                typeof global !== "undefined" ? global :
+                    Function("return this;")());
