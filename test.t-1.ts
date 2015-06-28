@@ -1,6 +1,6 @@
 ﻿///<reference path='Scripts/typings/mocha/mocha.d.ts'/>
 ///<reference path='Scripts/typings/chai/chai.d.ts'/>
-
+///<reference path='t-1.ts'/>
 
 
 describe('t_1.StringMatch',() => {
@@ -103,23 +103,23 @@ describe('t_1.StringMatch',() => {
         chai.expect(resultObj['option1']).to.equal('test 1');
     });
 
-    it(`Test 8.  Use of Symbols`,() => {
-        const obj = {
-            varName:    Symbol(),
-            varVal:     Symbol(),
-            comment:    Symbol(),
-        };
-        const compiler = new t_1.TemplateCompiler(obj);
-        console.log(obj);
-        const test8 = compiler.compile
-            `const    ${obj.varName}=${obj.varVal};${t_1.opt`//${<string>obj.comment}`}`;
-        const parseOpts: t_1.IParseOptions = {
-            //ignoreWhitespace: true,
-            normalizeFunction: t_1.removeWhitespaceInJS,
-            //debug: 'true',
-        };
-        //var resultObj = test8.parse('const test   =   "hello";      //another     comment', null, parseOpts);
-    });
+    // it(`Test 8.  Use of Symbols`,() => {
+    //     const obj = {
+    //         varName:    Symbol(),
+    //         varVal:     Symbol(),
+    //         comment:    Symbol(),
+    //     };
+    //     const compiler = new t_1.TemplateCompiler(obj);
+    //     console.log(obj);
+    //     const test8 = compiler.compile
+    //         `const    ${obj.varName}=${obj.varVal};${t_1.opt`//${<string>obj.comment}`}`;
+    //     const parseOpts: t_1.IParseOptions = {
+    //         //ignoreWhitespace: true,
+    //         normalizeFunction: t_1.removeWhitespaceInJS,
+    //         //debug: 'true',
+    //     };
+    //     //var resultObj = test8.parse('const test   =   "hello";      //another     comment', null, parseOpts);
+    // });
     it(`Test 9.  Use of reflection with metadata`, () => {
         const obj = {
             properties: {
