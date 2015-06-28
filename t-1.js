@@ -43,7 +43,7 @@ var t_1;
         return chrCode >= chrCodeFor0 && chrCode <= chrCodeFor9;
     }
     function removeWhitespaceInJS(s) {
-        console.log('removeWhitespaceInJs for s = ' + s);
+        //console.log('removeWhitespaceInJs for s = ' + s);
         var result = '';
         var bInsideComment = false;
         //var bFirstSpaceEncountered = false;
@@ -82,7 +82,7 @@ var t_1;
         //        case ' ':
         //    }
         //}
-        console.log('result: ' + result);
+        //console.log('result: ' + result);
         return result;
     }
     t_1.removeWhitespaceInJS = removeWhitespaceInJS;
@@ -282,15 +282,19 @@ var t_1;
     t_1.StringMatch = StringMatch;
 })(t_1 || (t_1 = {}));
 (function (__global) {
-    if (typeof __global.t_1 !== "undefined") {
-        if (__global.t_1 !== t_1) {
-            for (var p in t_1) {
-                __global.t_1[p] = t_1[p];
+    var modInfo = {
+        name: 't_1',
+        mod: t_1,
+    };
+    if (typeof __global[modInfo.name] !== "undefined") {
+        if (__global[modInfo.name] !== modInfo.mod) {
+            for (var p in modInfo.mod) {
+                __global[modInfo.name][p] = modInfo.mod[p];
             }
         }
     }
     else {
-        __global.t_1 = t_1;
+        __global[modInfo.name] = modInfo.mod;
     }
 })(typeof window !== "undefined" ? window :
     typeof WorkerGlobalScope !== "undefined" ? self :

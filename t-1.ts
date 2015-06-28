@@ -60,7 +60,7 @@ module t_1{
     }
     
     export function removeWhitespaceInJS(s: string) {
-        console.log('removeWhitespaceInJs for s = ' + s);
+        //console.log('removeWhitespaceInJs for s = ' + s);
         var result = '';
         var bInsideComment = false;
         //var bFirstSpaceEncountered = false;
@@ -103,7 +103,7 @@ module t_1{
 
         //    }
         //}
-        console.log('result: ' + result);
+        //console.log('result: ' + result);
         return result;
     }
 
@@ -298,20 +298,25 @@ module t_1{
 }
 
 // hook global t_1
-declare var WorkerGlobalScope: any;
-    (function(__global: any) {
-        if (typeof __global.t_1 !== "undefined") {
-            if (__global.t_1 !== t_1) {
-                for (var p in t_1) {
-                    __global.t_1[p] = (<any>t_1)[p];
-                }
+declare const WorkerGlobalScope: any;
+
+(function(__global: any) {
+    const modInfo = {
+        name: 't_1',
+        mod: t_1,
+    }
+    if (typeof __global[modInfo.name] !== "undefined") {
+        if (__global[modInfo.name] !== modInfo.mod) {
+            for (var p in modInfo.mod) {
+                __global[modInfo.name][p] = (<any>modInfo.mod)[p];
             }
         }
-        else {
-            __global.t_1 = t_1;
-        }
-    })(
-        typeof window !== "undefined" ? window :
-            typeof WorkerGlobalScope !== "undefined" ? self :
-                typeof global !== "undefined" ? global :
-                    Function("return this;")());
+    }
+    else {
+        __global[modInfo.name] = modInfo.mod;
+    }
+})(
+    typeof window !== "undefined" ? window :
+        typeof WorkerGlobalScope !== "undefined" ? self :
+            typeof global !== "undefined" ? global :
+                Function("return this;")());
